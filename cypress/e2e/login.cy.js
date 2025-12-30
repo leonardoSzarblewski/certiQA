@@ -54,4 +54,12 @@ describe('login', () => {
         cy.contains('button', 'Voltar ao Login').click()
     })
 
+    it('Should successfully log out the user and return to the home screen', () => {
+        cy.login(Cypress.env('userEmail'), Cypress.env('userPassword'))
+        cy.url().should('eq', 'https://certiqa-qazando.com/painel')
+
+        cy.contains('button', 'Sair').click()
+        cy.url().should('eq', 'https://certiqa-qazando.com/')
+    })
+
 })
