@@ -9,7 +9,7 @@ describe('login', () => {
     
     it('should log in successfully with valid credentials', () => {
         cy.clock()
-        cy.login(Cypress.env('userEmail'), Cypress.env('userPassword'))
+        cy.login(Cypress.env('userActive'), Cypress.env('userPassword'))
 
         cy.contains('li', 'Login bem-sucedido').should('be.visible')
         cy.tick(5000)
@@ -55,7 +55,7 @@ describe('login', () => {
     })
 
     it('Should successfully log out the user and return to the home screen', () => {
-        cy.login(Cypress.env('userEmail'), Cypress.env('userPassword'))
+        cy.login(Cypress.env('userActive'), Cypress.env('userPassword'))
         cy.url().should('eq', 'https://certiqa-qazando.com/painel')
 
         cy.contains('button', 'Sair').click()
