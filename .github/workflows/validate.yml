@@ -6,26 +6,41 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout # Baixa o código do seu repositório para dentro da máquina do GitHub
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js # Instala o Node.js na versão 22 e configura o cache para acelerar o npm
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install dependencies # Instala todas as bibliotecas do projeto (como o Cypress) listadas no package-lock.json
         run: npm ci
 
-      - name: Run Lint
+      - name: Run Lint # Verifica se o seu código segue as regras de padronização do ESLint
         run: npx eslint .
 
-      - name: Cypress run
+      - name: Cypress run # Executa os testes automatizados usando o navegador Chrome
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
         env:
+          # Passa os segredos do GitHub (Secrets) para as variáveis de ambiente do Cypress
           CYPRESS_userAdmin: ${{ secrets.USER_ADMIN }}
           CYPRESS_userActive: ${{ secrets.USER_ACTIVE }}
           CYPRESS_userPassword: ${{ secrets.USER_PASSWORD }}
+
+      - name: Upload Cypress screenshots # Salva fotos dos erros apenas se algum teste falhar para facilitar a depuração
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Upload Cypress videos # Sempre guarda o vídeo da execução completa dos testes como evidência
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-videos
+          path: cypress/videos
