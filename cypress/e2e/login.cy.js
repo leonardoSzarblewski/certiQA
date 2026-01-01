@@ -7,23 +7,18 @@ describe('login', () => {
   })
 
   it('should log in successfully with valid credentials', () => {
-    cy.clock()
     cy.login(Cypress.env('userActive'), Cypress.env('userPassword'))
 
     cy.contains('li', 'Login bem-sucedido').should('be.visible')
-    cy.tick(5000)
   })
 
   it('should display an error message when logging in with invalid credentials', () => {
-    cy.clock()
-
     cy.get('#email').type(faker.internet.email())
     cy.get('#password').type(faker.internet.password())
 
     cy.contains('button', 'Entrar').click()
 
     cy.contains('li', 'Erro no login')
-    cy.tick(5000)
   })
 
   it('should display a validation alert when the password field is empty', () => {
@@ -42,13 +37,10 @@ describe('login', () => {
 
   it('should send a recovery email when the forgot password flow is completed', () => {
     cy.contains('a', 'Esqueceu a senha?').click()
-    cy.clock()
 
     cy.get('#email').type(faker.internet.email())
     cy.contains('button', 'Enviar Link de Recuperação').click()
     cy.contains('li', 'E-mail enviado!').should('be.visible')
-
-    cy.tick(5000)
 
     cy.contains('button', 'Voltar ao Login').click()
   })
