@@ -25,17 +25,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
-
-      - name: Upload Cypress screenshots
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-
-      - name: Upload Cypress videos
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: cypress-videos
-          path: cypress/videos
+        env:
+          CYPRESS_userAdmin: ${{ secrets.USER_ADMIN }}
+          CYPRESS_userActive: ${{ secrets.USER_ACTIVE }}
+          CYPRESS_userPassword: ${{ secrets.USER_PASSWORD }}
